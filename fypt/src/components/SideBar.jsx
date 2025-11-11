@@ -16,6 +16,10 @@ import {
   Folder,
   Activity,
   User,
+  Brain,
+  Terminal,
+  BarChart3,
+  Stethoscope,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -38,14 +42,20 @@ const Sidebar = () => {
     {
       icon: Calendar,
       label: "Appointments",
-      href: "/appointments",
-      key: "appointments",
+      href: "/enhanced-appointments",
+      key: "enhanced-appointments",
     },
     {
       icon: Activity,
       label: "Health Metrics",
       href: "/metrics",
       key: "metrics",
+    },
+    {
+      icon: Brain,
+      label: "AI Assistant",
+      href: "/ai-chat",
+      key: "ai-chat",
     },
   ];
 
@@ -74,6 +84,21 @@ const Sidebar = () => {
       key: "notifications",
     },
     { icon: Settings, label: "Settings", href: "/settings", key: "settings" },
+  ];
+
+  const adminItems = [
+    {
+      icon: Terminal,
+      label: "System Logs",
+      href: "/system-logs",
+      key: "system-logs",
+    },
+    {
+      icon: BarChart3,
+      label: "AI Insights",
+      href: "/ai-insights",
+      key: "ai-insights",
+    },
   ];
 
   const bottomItems = [
@@ -130,8 +155,7 @@ const Sidebar = () => {
                 <p className="text-green-100 text-xs">Health Records</p>
               </div>
             </div>
-            <SheetClose asChild>
-            </SheetClose>
+            <SheetClose asChild></SheetClose>
           </div>
 
           <div className="p-6 border-b bg-gray-50">
@@ -162,6 +186,12 @@ const Sidebar = () => {
             <MenuSection
               title="Account"
               items={accountItems}
+              onClick={() => setOpen(false)}
+            />
+
+            <MenuSection
+              title="Administration"
+              items={adminItems}
               onClick={() => setOpen(false)}
             />
           </div>

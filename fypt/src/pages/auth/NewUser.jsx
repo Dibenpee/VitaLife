@@ -59,7 +59,7 @@ const NewUser = () => {
     },
   });
 
-  const totalSteps = 4;
+  const totalSteps = 3;
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -99,7 +99,7 @@ const NewUser = () => {
 
   const StepIndicator = () => (
     <div className="flex items-center justify-center space-x-4 mb-8">
-      {[1, 2, 3, 4].map((step) => (
+      {[1, 2, 3].map((step) => (
         <div key={step} className="flex items-center">
           <div
             className={`
@@ -113,7 +113,7 @@ const NewUser = () => {
           >
             {currentStep > step ? <CheckCircle className="w-5 h-5" /> : step}
           </div>
-          {step < 4 && (
+          {step < 3 && (
             <div
               className={`
               w-12 h-1 mx-2
@@ -128,16 +128,14 @@ const NewUser = () => {
 
   const stepTitles = {
     1: "Personal Information",
-    2: "Medical Details",
-    3: "Security Setup",
-    4: "Preferences & Privacy",
+    2: "Security Setup",
+    3: "Preferences & Privacy",
   };
 
   const stepDescriptions = {
     1: "Let's start with your basic information",
-    2: "Help us understand your medical background",
-    3: "Secure your account with a strong password",
-    4: "Customize your VitaLife experience",
+    2: "Secure your account with a strong password",
+    3: "Customize your VitaLife experience",
   };
 
   return (
@@ -238,94 +236,6 @@ const NewUser = () => {
 
               {currentStep === 2 && (
                 <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <SelectField
-                      label="Blood Type"
-                      name="bloodType"
-                      value={formData.bloodType}
-                      onChange={handleInputChange}
-                      options={[
-                        { value: "A+", label: "A+" },
-                        { value: "A-", label: "A-" },
-                        { value: "B+", label: "B+" },
-                        { value: "B-", label: "B-" },
-                        { value: "AB+", label: "AB+" },
-                        { value: "AB-", label: "AB-" },
-                        { value: "O+", label: "O+" },
-                        { value: "O-", label: "O-" },
-                        { value: "unknown", label: "Unknown" },
-                      ]}
-                      placeholder="Select blood type"
-                    />
-
-                    <TextField
-                      label="Primary Doctor"
-                      name="primaryDoctor"
-                      value={formData.primaryDoctor}
-                      onChange={handleInputChange}
-                      placeholder="Dr. Smith"
-                    />
-                  </div>
-
-                  <TextField
-                    label="Known Allergies"
-                    name="allergies"
-                    value={formData.allergies}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Penicillin, Nuts, None"
-                    helper="List any known allergies separated by commas"
-                  />
-
-                  <TextField
-                    label="Current Medications"
-                    name="medications"
-                    value={formData.medications}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Aspirin 81mg daily, None"
-                    helper="List current medications and dosages"
-                  />
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <TextField
-                      label="Emergency Contact"
-                      name="emergencyContact"
-                      value={formData.emergencyContact}
-                      onChange={handleInputChange}
-                      placeholder="Contact name"
-                      required
-                    />
-
-                    <PhoneField
-                      label="Emergency Phone"
-                      name="emergencyPhone"
-                      value={formData.emergencyPhone}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <TextField
-                      label="Insurance Provider"
-                      name="insuranceProvider"
-                      value={formData.insuranceProvider}
-                      onChange={handleInputChange}
-                      placeholder="e.g., Blue Cross Blue Shield"
-                    />
-
-                    <TextField
-                      label="Policy Number"
-                      name="policyNumber"
-                      value={formData.policyNumber}
-                      onChange={handleInputChange}
-                      placeholder="Insurance policy number"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {currentStep === 3 && (
-                <div className="space-y-6">
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                     <div className="flex items-center space-x-2">
                       <Shield className="w-5 h-5 text-blue-600" />
@@ -372,7 +282,7 @@ const NewUser = () => {
                 </div>
               )}
 
-              {currentStep === 4 && (
+              {currentStep === 3 && (
                 <div className="space-y-6">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                     <div className="flex items-center space-x-2">

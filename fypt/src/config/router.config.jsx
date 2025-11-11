@@ -7,6 +7,11 @@ import Reports from "../pages/Reports";
 import AddRecords from "../pages/AddRecords";
 import NewUser from "../pages/auth/NewUser";
 import ComponentShowcase from "../pages/ComponentShowcase";
+import AIChatPage from "../pages/AIChatPage";
+import NotificationsPage from "../pages/NotificationsPage";
+import SystemLogsPage from "../pages/SystemLogsPage";
+import AIInsightsPage from "../pages/AIInsightsPage";
+import EnhancedAppointmentsPage from "../pages/EnhancedAppointmentsPage";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +51,10 @@ const router = createBrowserRouter([
     element: <Dashboard />, // Placeholder for now
   },
   {
+    path: "/enhanced-appointments",
+    element: <EnhancedAppointmentsPage />,
+  },
+  {
     path: "/import",
     element: <AddRecords />, // Reuse AddRecords for import
   },
@@ -55,7 +64,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/notifications",
-    element: <Dashboard />, // Placeholder for now
+    element: <NotificationsPage />,
+  },
+  {
+    path: "/ai-chat",
+    element: <AIChatPage />,
+  },
+  {
+    path: "/system-logs",
+    element: <SystemLogsPage />,
+  },
+  {
+    path: "/ai-insights",
+    element: <AIInsightsPage />,
   },
   {
     path: "/settings",
