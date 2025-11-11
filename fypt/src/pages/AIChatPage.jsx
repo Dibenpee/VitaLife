@@ -152,7 +152,7 @@ const AIChatPage = () => {
             </Button>
             <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
               <span className="text-sm font-medium text-green-600">
-                {user?.name?.charAt(0) || 'U'}
+                {user?.name?.charAt(0) || "U"}
               </span>
             </div>
           </div>
@@ -191,128 +191,128 @@ const AIChatPage = () => {
             </div>
           </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Chat Interface */}
-          <div className="lg:col-span-2">
-            <ChatInterface
-              height="calc(100vh - 200px)"
-              showHeader={false}
-              className="shadow-lg"
-            />
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Chat Interface */}
+            <div className="lg:col-span-2">
+              <ChatInterface
+                height="calc(100vh - 200px)"
+                showHeader={false}
+                className="shadow-lg"
+              />
+            </div>
 
-          {/* Sidebar with Quick Actions and Suggestions */}
-          <div className="space-y-6">
-            {/* Quick Actions */}
-            {showQuickActions && (
+            {/* Sidebar with Quick Actions and Suggestions */}
+            <div className="space-y-6">
+              {/* Quick Actions */}
+              {showQuickActions && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <Sparkles className="w-5 h-5 text-blue-500" />
+                      Quick Actions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {quickActions.map((action) => (
+                      <Button
+                        key={action.id}
+                        variant="ghost"
+                        onClick={() => handleQuickAction(action)}
+                        className={`w-full p-4 h-auto flex items-start gap-3 border ${action.color} hover:opacity-80`}
+                      >
+                        <action.icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                        <div className="text-left">
+                          <div className="font-medium">{action.title}</div>
+                          <div className="text-xs opacity-75 mt-1">
+                            {action.description}
+                          </div>
+                        </div>
+                      </Button>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* AI Suggestions */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <Sparkles className="w-5 h-5 text-blue-500" />
-                    Quick Actions
+                    <Brain className="w-5 h-5 text-green-500" />
+                    Suggested Questions
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  {quickActions.map((action) => (
+                <CardContent className="space-y-2">
+                  {aiSuggestions.map((suggestion, index) => (
                     <Button
-                      key={action.id}
+                      key={index}
                       variant="ghost"
-                      onClick={() => handleQuickAction(action)}
-                      className={`w-full p-4 h-auto flex items-start gap-3 border ${action.color} hover:opacity-80`}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="w-full p-3 h-auto text-left text-sm text-gray-700 hover:bg-gray-100 justify-start"
                     >
-                      <action.icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                      <div className="text-left">
-                        <div className="font-medium">{action.title}</div>
-                        <div className="text-xs opacity-75 mt-1">
-                          {action.description}
-                        </div>
-                      </div>
+                      <span className="text-blue-500 mr-2">•</span>
+                      {suggestion}
                     </Button>
                   ))}
                 </CardContent>
               </Card>
-            )}
 
-            {/* AI Suggestions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Brain className="w-5 h-5 text-green-500" />
-                  Suggested Questions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {aiSuggestions.map((suggestion, index) => (
-                  <Button
-                    key={index}
-                    variant="ghost"
-                    onClick={() => handleSuggestionClick(suggestion)}
-                    className="w-full p-3 h-auto text-left text-sm text-gray-700 hover:bg-gray-100 justify-start"
-                  >
-                    <span className="text-blue-500 mr-2">•</span>
-                    {suggestion}
-                  </Button>
-                ))}
-              </CardContent>
-            </Card>
+              {/* AI Capabilities */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">AI Capabilities</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-blue-500" />
+                      <span>Medical record analysis</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Pill className="w-4 h-4 text-green-500" />
+                      <span>Drug interaction checking</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4 text-purple-500" />
+                      <span>Health trend analysis</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Target className="w-4 h-4 text-orange-500" />
+                      <span>Personalized recommendations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-red-500" />
+                      <span>Risk assessments</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Stethoscope className="w-4 h-4 text-indigo-500" />
+                      <span>Symptom analysis</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-            {/* AI Capabilities */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">AI Capabilities</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-blue-500" />
-                    <span>Medical record analysis</span>
+              {/* Privacy Notice */}
+              <Card className="border-blue-200 bg-blue-50">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-blue-600 text-xs font-bold">i</span>
+                    </div>
+                    <div className="text-sm">
+                      <p className="font-medium text-blue-900 mb-1">
+                        Privacy & Security
+                      </p>
+                      <p className="text-blue-700 text-xs leading-relaxed">
+                        Your health conversations are encrypted and secure. The
+                        AI provides educational information and should not
+                        replace professional medical advice.
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Pill className="w-4 h-4 text-green-500" />
-                    <span>Drug interaction checking</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-purple-500" />
-                    <span>Health trend analysis</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Target className="w-4 h-4 text-orange-500" />
-                    <span>Personalized recommendations</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-red-500" />
-                    <span>Risk assessments</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Stethoscope className="w-4 h-4 text-indigo-500" />
-                    <span>Symptom analysis</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Privacy Notice */}
-            <Card className="border-blue-200 bg-blue-50">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-blue-600 text-xs font-bold">i</span>
-                  </div>
-                  <div className="text-sm">
-                    <p className="font-medium text-blue-900 mb-1">
-                      Privacy & Security
-                    </p>
-                    <p className="text-blue-700 text-xs leading-relaxed">
-                      Your health conversations are encrypted and secure. The AI
-                      provides educational information and should not replace
-                      professional medical advice.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </div>

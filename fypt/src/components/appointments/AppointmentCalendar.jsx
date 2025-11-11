@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useAppointments } from '../../hooks';
-import { cn } from '../../lib/utils';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Button } from '../ui/button';
+import { useState, useEffect } from "react";
+import { useAppointments } from "../../hooks";
+import { cn } from "../../lib/utils";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Button } from "../ui/button";
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,17 +13,17 @@ import {
   Plus,
   Filter,
   Search,
-  MapPin
-} from 'lucide-react';
+  MapPin,
+} from "lucide-react";
 
 const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
   const { appointments, loading, fetchAppointments } = useAppointments();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [view, setView] = useState('month'); // month, week, day
+  const [view, setView] = useState("month"); // month, week, day
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [filteredAppointments, setFilteredAppointments] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     fetchAppointments();
@@ -31,15 +31,17 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
 
   useEffect(() => {
     if (appointments) {
-      let filtered = appointments.filter(apt => {
+      let filtered = appointments.filter((apt) => {
         const aptDate = new Date(apt.appointmentDate);
-        const matchesSearch = !searchTerm || 
+        const matchesSearch =
+          !searchTerm ||
           apt.doctorName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           apt.patientName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           apt.reason?.toLowerCase().includes(searchTerm.toLowerCase());
-        
-        const matchesStatus = statusFilter === 'all' || apt.status === statusFilter;
-        
+
+        const matchesStatus =
+          statusFilter === "all" || apt.status === statusFilter;
+
         return matchesSearch && matchesStatus;
       });
       setFilteredAppointments(filtered);
@@ -53,33 +55,33 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
     const startingDayOfWeek = firstDay.getDay();
-    
+
     const days = [];
-    
+
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
-    
+
     // Add all days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
-    
+
     return days;
   };
 
   const getAppointmentsForDate = (date) => {
     if (!date || !filteredAppointments) return [];
-    
-    return filteredAppointments.filter(apt => {
+
+    return filteredAppointments.filter((apt) => {
       const aptDate = new Date(apt.appointmentDate);
       return aptDate.toDateString() === date.toDateString();
     });
   };
 
   const navigateMonth = (direction) => {
-    setCurrentDate(prev => {
+    setCurrentDate((prev) => {
       const newDate = new Date(prev);
       newDate.setMonth(prev.getMonth() + direction);
       return newDate;
@@ -88,21 +90,28 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
-      case 'scheduled': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'confirmed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'in-progress': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'completed': return 'bg-gray-100 text-gray-800 border-gray-200';
-      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
-      case 'no-show': return 'bg-orange-100 text-orange-800 border-orange-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "scheduled":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "confirmed":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "in-progress":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "completed":
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "no-show":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const formatTime = (dateString) => {
-    return new Date(dateString).toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
+    return new Date(dateString).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
   };
 
@@ -112,15 +121,29 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
   };
 
   const isSelected = (date) => {
-    return date && selectedDate && date.toDateString() === selectedDate.toDateString();
+    return (
+      date &&
+      selectedDate &&
+      date.toDateString() === selectedDate.toDateString()
+    );
   };
 
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   if (loading) {
     return (
@@ -204,33 +227,33 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
           </div>
           <div className="flex items-center gap-2">
             <Button
-              variant={view === 'month' ? 'default' : 'outline'}
+              variant={view === "month" ? "default" : "outline"}
               size="sm"
-              onClick={() => setView('month')}
+              onClick={() => setView("month")}
             >
               Month
             </Button>
             <Button
-              variant={view === 'week' ? 'default' : 'outline'}
+              variant={view === "week" ? "default" : "outline"}
               size="sm"
-              onClick={() => setView('week')}
+              onClick={() => setView("week")}
             >
               Week
             </Button>
             <Button
-              variant={view === 'day' ? 'default' : 'outline'}
+              variant={view === "day" ? "default" : "outline"}
               size="sm"
-              onClick={() => setView('day')}
+              onClick={() => setView("day")}
             >
               Day
             </Button>
           </div>
         </div>
 
-        {view === 'month' && (
+        {view === "month" && (
           <div className="grid grid-cols-7 gap-1">
             {/* Week day headers */}
-            {weekDays.map(day => (
+            {weekDays.map((day) => (
               <div
                 key={day}
                 className="p-3 text-center text-sm font-medium text-gray-600 border-b"
@@ -238,11 +261,11 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
                 {day}
               </div>
             ))}
-            
+
             {/* Calendar days */}
             {getDaysInMonth(currentDate).map((date, index) => {
               const dayAppointments = date ? getAppointmentsForDate(date) : [];
-              
+
               return (
                 <div
                   key={index}
@@ -256,10 +279,12 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
                 >
                   {date && (
                     <>
-                      <div className={cn(
-                        "text-sm font-medium mb-2",
-                        isToday(date) ? "text-blue-600" : "text-gray-900"
-                      )}>
+                      <div
+                        className={cn(
+                          "text-sm font-medium mb-2",
+                          isToday(date) ? "text-blue-600" : "text-gray-900"
+                        )}
+                      >
                         {date.getDate()}
                       </div>
                       <div className="space-y-1">
@@ -298,20 +323,20 @@ const AppointmentCalendar = ({ onAppointmentSelect, onCreateNew }) => {
           </div>
         )}
 
-        {view === 'week' && (
+        {view === "week" && (
           <div className="text-center text-gray-500 py-8">
             Week view coming soon...
           </div>
         )}
 
-        {view === 'day' && selectedDate && (
+        {view === "day" && selectedDate && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">
-              {selectedDate.toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
+              {selectedDate.toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
               })}
             </h3>
             <div className="space-y-2">

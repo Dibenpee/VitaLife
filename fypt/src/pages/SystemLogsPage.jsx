@@ -259,7 +259,7 @@ const SystemLogsPage = () => {
             </Button>
             <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
               <span className="text-sm font-medium text-green-600">
-                {user?.name?.charAt(0) || 'U'}
+                {user?.name?.charAt(0) || "U"}
               </span>
             </div>
           </div>
@@ -282,202 +282,204 @@ const SystemLogsPage = () => {
                   <p className="text-gray-600">
                     Monitor system events, errors, and application activity
                   </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button variant="outline">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Log Settings
+                </Button>
+                <Button onClick={() => window.print()}>
+                  <Download className="w-4 h-4 mr-2" />
+                  Export Report
+                </Button>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button variant="outline">
-                <Settings className="w-4 h-4 mr-2" />
-                Log Settings
-              </Button>
-              <Button onClick={() => window.print()}>
-                <Download className="w-4 h-4 mr-2" />
-                Export Report
-              </Button>
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {quickStats.map((stat, index) => (
+                <Card key={index} className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.color}`}
+                    >
+                      <stat.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </p>
+                      <p className="text-sm text-gray-600">{stat.title}</p>
+                      <p className="text-xs text-gray-500">
+                        {stat.description}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
             </div>
           </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {quickStats.map((stat, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.color}`}
-                  >
-                    <stat.icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stat.value}
-                    </p>
-                    <p className="text-sm text-gray-600">{stat.title}</p>
-                    <p className="text-xs text-gray-500">{stat.description}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Logs Viewer */}
+            <div className="lg:col-span-2">
+              <LogsViewer
+                logs={logs}
+                loading={loading}
+                error={error}
+                onRefresh={handleRefresh}
+                onExportLogs={handleExport}
+                onClearLogs={handleClearLogs}
+                showHeader={false}
+                maxHeight="calc(100vh - 320px)"
+                enableAutoRefresh={true}
+                autoRefreshInterval={30000}
+                className="shadow-lg"
+              />
+            </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Logs Viewer */}
-          <div className="lg:col-span-2">
-            <LogsViewer
-              logs={logs}
-              loading={loading}
-              error={error}
-              onRefresh={handleRefresh}
-              onExportLogs={handleExport}
-              onClearLogs={handleClearLogs}
-              showHeader={false}
-              maxHeight="calc(100vh - 320px)"
-              enableAutoRefresh={true}
-              autoRefreshInterval={30000}
-              className="shadow-lg"
-            />
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* System Health */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Activity className="w-5 h-5 text-green-500" />
-                  System Health
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center mb-4">
-                  <div
-                    className={`text-4xl font-bold mb-2 ${
-                      systemHealth.status === "excellent"
-                        ? "text-green-600"
-                        : systemHealth.status === "good"
-                        ? "text-blue-600"
-                        : systemHealth.status === "fair"
-                        ? "text-yellow-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {systemHealth.score || 0}%
-                  </div>
-                  <p className="text-sm text-gray-600 capitalize">
-                    {systemHealth.status || "Unknown"} Health
-                  </p>
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>Events (24h):</span>
-                    <span className="font-medium">
-                      {systemHealth.totalEvents || 0}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Errors:</span>
-                    <span className="font-medium text-red-600">
-                      {systemHealth.errorCount || 0}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Warnings:</span>
-                    <span className="font-medium text-orange-600">
-                      {systemHealth.warningCount || 0}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Log Level Distribution */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <BarChart3 className="w-5 h-5 text-blue-500" />
-                  Log Distribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {logLevelStats.map((stat) => (
-                  <div
-                    key={stat.level}
-                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50"
-                  >
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* System Health */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Activity className="w-5 h-5 text-green-500" />
+                    System Health
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center mb-4">
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${stat.color}`}
+                      className={`text-4xl font-bold mb-2 ${
+                        systemHealth.status === "excellent"
+                          ? "text-green-600"
+                          : systemHealth.status === "good"
+                          ? "text-blue-600"
+                          : systemHealth.status === "fair"
+                          ? "text-yellow-600"
+                          : "text-red-600"
+                      }`}
                     >
-                      <stat.icon className="w-4 h-4" />
+                      {systemHealth.score || 0}%
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">
-                          {stat.label}
-                        </span>
-                        <span className="text-lg font-bold text-gray-900">
-                          {stat.count}
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                        <div
-                          className={`h-1.5 rounded-full ${stat.color
-                            .replace("text-", "bg-")
-                            .replace(" bg-", "-500 bg-")}`}
-                          style={{
-                            width: `${
-                              logStats.total
-                                ? (stat.count / logStats.total) * 100
-                                : 0
-                            }%`,
-                          }}
-                        />
-                      </div>
+                    <p className="text-sm text-gray-600 capitalize">
+                      {systemHealth.status || "Unknown"} Health
+                    </p>
+                  </div>
+
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Events (24h):</span>
+                      <span className="font-medium">
+                        {systemHealth.totalEvents || 0}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Errors:</span>
+                      <span className="font-medium text-red-600">
+                        {systemHealth.errorCount || 0}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Warnings:</span>
+                      <span className="font-medium text-orange-600">
+                        {systemHealth.warningCount || 0}
+                      </span>
                     </div>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">System Status</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 border border-green-200">
-                  <Server className="w-5 h-5 text-green-600" />
-                  <div>
-                    <p className="text-sm font-medium text-green-900">
-                      API Server
-                    </p>
-                    <p className="text-xs text-green-700">Online</p>
-                  </div>
-                </div>
+              {/* Log Level Distribution */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <BarChart3 className="w-5 h-5 text-blue-500" />
+                    Log Distribution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {logLevelStats.map((stat) => (
+                    <div
+                      key={stat.level}
+                      className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50"
+                    >
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center ${stat.color}`}
+                      >
+                        <stat.icon className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">
+                            {stat.label}
+                          </span>
+                          <span className="text-lg font-bold text-gray-900">
+                            {stat.count}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                          <div
+                            className={`h-1.5 rounded-full ${stat.color
+                              .replace("text-", "bg-")
+                              .replace(" bg-", "-500 bg-")}`}
+                            style={{
+                              width: `${
+                                logStats.total
+                                  ? (stat.count / logStats.total) * 100
+                                  : 0
+                              }%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
 
-                <div className="flex items-center gap-3 p-2 rounded-lg bg-blue-50 border border-blue-200">
-                  <Database className="w-5 h-5 text-blue-600" />
-                  <div>
-                    <p className="text-sm font-medium text-blue-900">
-                      Database
-                    </p>
-                    <p className="text-xs text-blue-700">Connected</p>
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">System Status</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 border border-green-200">
+                    <Server className="w-5 h-5 text-green-600" />
+                    <div>
+                      <p className="text-sm font-medium text-green-900">
+                        API Server
+                      </p>
+                      <p className="text-xs text-green-700">Online</p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 border border-green-200">
-                  <Shield className="w-5 h-5 text-green-600" />
-                  <div>
-                    <p className="text-sm font-medium text-green-900">
-                      Security
-                    </p>
-                    <p className="text-xs text-green-700">Protected</p>
+                  <div className="flex items-center gap-3 p-2 rounded-lg bg-blue-50 border border-blue-200">
+                    <Database className="w-5 h-5 text-blue-600" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-900">
+                        Database
+                      </p>
+                      <p className="text-xs text-blue-700">Connected</p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+
+                  <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 border border-green-200">
+                    <Shield className="w-5 h-5 text-green-600" />
+                    <div>
+                      <p className="text-sm font-medium text-green-900">
+                        Security
+                      </p>
+                      <p className="text-xs text-green-700">Protected</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </div>

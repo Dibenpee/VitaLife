@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useAppointments } from '../../hooks';
-import { cn } from '../../lib/utils';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Button } from '../ui/button';
+import { useState } from "react";
+import { useAppointments } from "../../hooks";
+import { cn } from "../../lib/utils";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Button } from "../ui/button";
 import {
   Calendar,
   Clock,
@@ -21,53 +21,65 @@ import {
   Repeat,
   MessageSquare,
   History,
-  X
-} from 'lucide-react';
+  X,
+} from "lucide-react";
 
 const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
   const { updateAppointment, cancelAppointment, loading } = useAppointments();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState("");
   const [showAddNote, setShowAddNote] = useState(false);
 
   if (!isOpen || !appointment) return null;
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
-      case 'scheduled': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'confirmed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'in-progress': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'completed': return 'bg-gray-100 text-gray-800 border-gray-200';
-      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
-      case 'no-show': return 'bg-orange-100 text-orange-800 border-orange-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "scheduled":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "confirmed":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "in-progress":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "completed":
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "no-show":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const getPriorityColor = (priority) => {
     switch (priority?.toLowerCase()) {
-      case 'low': return 'text-green-600';
-      case 'normal': return 'text-blue-600';
-      case 'high': return 'text-yellow-600';
-      case 'urgent': return 'text-red-600';
-      default: return 'text-gray-600';
+      case "low":
+        return "text-green-600";
+      case "normal":
+        return "text-blue-600";
+      case "high":
+        return "text-yellow-600";
+      case "urgent":
+        return "text-red-600";
+      default:
+        return "text-gray-600";
     }
   };
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
     return {
-      date: date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      date: date.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       }),
-      time: date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-      })
+      time: date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }),
     };
   };
 
@@ -75,15 +87,17 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
     const now = new Date();
     const aptTime = new Date(appointment.appointmentDate);
     const diffMs = aptTime - now;
-    
+
     if (diffMs < 0) {
-      return 'Past appointment';
+      return "Past appointment";
     }
-    
+
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(
+      (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
     const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    
+
     if (days > 0) {
       return `${days} days, ${hours} hours`;
     } else if (hours > 0) {
@@ -97,7 +111,7 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
     try {
       await updateAppointment(appointment.id, { status: newStatus });
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error("Error updating status:", error);
     }
   };
 
@@ -107,23 +121,23 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
       setShowCancelConfirm(false);
       onClose();
     } catch (error) {
-      console.error('Error cancelling appointment:', error);
+      console.error("Error cancelling appointment:", error);
     }
   };
 
   const handleAddNote = async () => {
     if (!notes.trim()) return;
-    
+
     try {
-      const updatedNotes = appointment.notes 
+      const updatedNotes = appointment.notes
         ? `${appointment.notes}\n\n[${new Date().toLocaleString()}] ${notes}`
         : `[${new Date().toLocaleString()}] ${notes}`;
-      
+
       await updateAppointment(appointment.id, { notes: updatedNotes });
-      setNotes('');
+      setNotes("");
       setShowAddNote(false);
     } catch (error) {
-      console.error('Error adding note:', error);
+      console.error("Error adding note:", error);
     }
   };
 
@@ -144,10 +158,12 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className={cn(
-                "px-3 py-1 rounded-full text-sm font-medium border",
-                getStatusColor(appointment.status)
-              )}>
+              <div
+                className={cn(
+                  "px-3 py-1 rounded-full text-sm font-medium border",
+                  getStatusColor(appointment.status)
+                )}
+              >
                 {appointment.status}
               </div>
               <Button
@@ -163,23 +179,26 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Time Until Appointment */}
-          {appointment.status !== 'completed' && appointment.status !== 'cancelled' && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-blue-800">
-                <Clock className="h-5 w-5" />
-                <span className="font-medium">Time Until Appointment</span>
+          {appointment.status !== "completed" &&
+            appointment.status !== "cancelled" && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 text-blue-800">
+                  <Clock className="h-5 w-5" />
+                  <span className="font-medium">Time Until Appointment</span>
+                </div>
+                <p className="text-blue-700 mt-1 text-lg font-semibold">
+                  {getTimeUntilAppointment()}
+                </p>
               </div>
-              <p className="text-blue-700 mt-1 text-lg font-semibold">
-                {getTimeUntilAppointment()}
-              </p>
-            </div>
-          )}
+            )}
 
           {/* Main Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold border-b pb-2">Appointment Information</h3>
-              
+              <h3 className="text-lg font-semibold border-b pb-2">
+                Appointment Information
+              </h3>
+
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <User className="h-5 w-5 text-gray-500 mt-1" />
@@ -207,7 +226,9 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
                     <p className="text-sm text-gray-600">Doctor</p>
                     <p className="font-medium">Dr. {appointment.doctorName}</p>
                     {appointment.doctorSpecialty && (
-                      <p className="text-sm text-gray-600">{appointment.doctorSpecialty}</p>
+                      <p className="text-sm text-gray-600">
+                        {appointment.doctorSpecialty}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -233,24 +254,35 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold border-b pb-2">Additional Details</h3>
-              
+              <h3 className="text-lg font-semibold border-b pb-2">
+                Additional Details
+              </h3>
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Type</span>
-                  <span className="font-medium capitalize">{appointment.type}</span>
+                  <span className="font-medium capitalize">
+                    {appointment.type}
+                  </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Priority</span>
-                  <span className={cn("font-medium capitalize", getPriorityColor(appointment.priority))}>
+                  <span
+                    className={cn(
+                      "font-medium capitalize",
+                      getPriorityColor(appointment.priority)
+                    )}
+                  >
                     {appointment.priority}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Duration</span>
-                  <span className="font-medium">{appointment.duration} minutes</span>
+                  <span className="font-medium">
+                    {appointment.duration} minutes
+                  </span>
                 </div>
 
                 {appointment.isRecurring && (
@@ -322,7 +354,7 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
                       size="sm"
                       onClick={() => {
                         setShowAddNote(false);
-                        setNotes('');
+                        setNotes("");
                       }}
                     >
                       Cancel
@@ -337,9 +369,9 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
           <div className="border-t pt-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {appointment.status === 'scheduled' && (
+                {appointment.status === "scheduled" && (
                   <Button
-                    onClick={() => handleStatusUpdate('confirmed')}
+                    onClick={() => handleStatusUpdate("confirmed")}
                     size="sm"
                     variant="outline"
                     className="flex items-center gap-2 text-green-600 border-green-200 hover:bg-green-50"
@@ -350,9 +382,10 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
                   </Button>
                 )}
 
-                {(appointment.status === 'scheduled' || appointment.status === 'confirmed') && (
+                {(appointment.status === "scheduled" ||
+                  appointment.status === "confirmed") && (
                   <Button
-                    onClick={() => handleStatusUpdate('completed')}
+                    onClick={() => handleStatusUpdate("completed")}
                     size="sm"
                     variant="outline"
                     className="flex items-center gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
@@ -363,18 +396,19 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
                   </Button>
                 )}
 
-                {appointment.status !== 'cancelled' && appointment.status !== 'completed' && (
-                  <Button
-                    onClick={() => setShowCancelConfirm(true)}
-                    size="sm"
-                    variant="outline"
-                    className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
-                    disabled={loading}
-                  >
-                    <XCircle className="h-4 w-4" />
-                    Cancel
-                  </Button>
-                )}
+                {appointment.status !== "cancelled" &&
+                  appointment.status !== "completed" && (
+                    <Button
+                      onClick={() => setShowCancelConfirm(true)}
+                      size="sm"
+                      variant="outline"
+                      className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+                      disabled={loading}
+                    >
+                      <XCircle className="h-4 w-4" />
+                      Cancel
+                    </Button>
+                  )}
               </div>
 
               <div className="flex items-center gap-2">
@@ -398,9 +432,12 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
               <div className="flex items-start gap-3">
                 <AlertCircle className="h-5 w-5 text-red-600 mt-1" />
                 <div className="flex-1">
-                  <h4 className="text-red-800 font-medium mb-2">Cancel Appointment</h4>
+                  <h4 className="text-red-800 font-medium mb-2">
+                    Cancel Appointment
+                  </h4>
                   <p className="text-red-700 text-sm mb-4">
-                    Are you sure you want to cancel this appointment? This action cannot be undone.
+                    Are you sure you want to cancel this appointment? This
+                    action cannot be undone.
                   </p>
                   <div className="flex items-center gap-2">
                     <Button
@@ -409,7 +446,7 @@ const AppointmentDetails = ({ appointment, onEdit, onClose, isOpen }) => {
                       variant="destructive"
                       disabled={loading}
                     >
-                      {loading ? 'Cancelling...' : 'Yes, Cancel'}
+                      {loading ? "Cancelling..." : "Yes, Cancel"}
                     </Button>
                     <Button
                       onClick={() => setShowCancelConfirm(false)}

@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useAppointments, useAuth } from '../../hooks';
-import { cn } from '../../lib/utils';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Button } from '../ui/button';
+import { useState, useEffect } from "react";
+import { useAppointments, useAuth } from "../../hooks";
+import { cn } from "../../lib/utils";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Button } from "../ui/button";
 import {
   Calendar,
   Clock,
@@ -17,32 +17,33 @@ import {
   Save,
   X,
   AlertCircle,
-  Plus
-} from 'lucide-react';
+  Plus,
+} from "lucide-react";
 
 const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
-  const { createAppointment, updateAppointment, loading, doctors } = useAppointments();
+  const { createAppointment, updateAppointment, loading, doctors } =
+    useAppointments();
   const { user } = useAuth();
   const [formData, setFormData] = useState({
-    patientId: '',
-    doctorId: '',
-    appointmentDate: '',
-    appointmentTime: '',
-    reason: '',
-    notes: '',
-    location: '',
-    type: 'consultation',
-    priority: 'normal',
+    patientId: "",
+    doctorId: "",
+    appointmentDate: "",
+    appointmentTime: "",
+    reason: "",
+    notes: "",
+    location: "",
+    type: "consultation",
+    priority: "normal",
     duration: 30,
-    status: 'scheduled',
+    status: "scheduled",
     isRecurring: false,
-    recurringPattern: 'weekly',
-    recurringEndDate: '',
+    recurringPattern: "weekly",
+    recurringEndDate: "",
     reminderEnabled: true,
     reminderTime: 24, // hours before
-    patientPhone: '',
-    patientEmail: '',
-    patientName: ''
+    patientPhone: "",
+    patientEmail: "",
+    patientName: "",
   });
   const [errors, setErrors] = useState({});
   const [availableSlots, setAvailableSlots] = useState([]);
@@ -52,25 +53,25 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
       const aptDate = new Date(appointment.appointmentDate);
       setFormData({
         ...appointment,
-        appointmentDate: aptDate.toISOString().split('T')[0],
+        appointmentDate: aptDate.toISOString().split("T")[0],
         appointmentTime: aptDate.toTimeString().slice(0, 5),
         reminderEnabled: appointment.reminderEnabled ?? true,
         reminderTime: appointment.reminderTime ?? 24,
-        isRecurring: appointment.isRecurring ?? false
+        isRecurring: appointment.isRecurring ?? false,
       });
     } else {
       // Reset form for new appointment
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        patientId: user?.role === 'patient' ? user.id : '',
-        appointmentDate: new Date().toISOString().split('T')[0]
+        patientId: user?.role === "patient" ? user.id : "",
+        appointmentDate: new Date().toISOString().split("T")[0],
       }));
     }
   }, [appointment, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -82,7 +83,7 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
 
       const appointmentData = {
         ...formData,
-        appointmentDate: appointmentDateTime.toISOString()
+        appointmentDate: appointmentDateTime.toISOString(),
       };
 
       if (appointment) {
@@ -93,8 +94,8 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
 
       onSave();
     } catch (error) {
-      console.error('Error saving appointment:', error);
-      setErrors({ submit: 'Failed to save appointment. Please try again.' });
+      console.error("Error saving appointment:", error);
+      setErrors({ submit: "Failed to save appointment. Please try again." });
     }
   };
 
@@ -102,19 +103,19 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
     const newErrors = {};
 
     if (!formData.doctorId) {
-      newErrors.doctorId = 'Doctor is required';
+      newErrors.doctorId = "Doctor is required";
     }
     if (!formData.appointmentDate) {
-      newErrors.appointmentDate = 'Date is required';
+      newErrors.appointmentDate = "Date is required";
     }
     if (!formData.appointmentTime) {
-      newErrors.appointmentTime = 'Time is required';
+      newErrors.appointmentTime = "Time is required";
     }
     if (!formData.reason) {
-      newErrors.reason = 'Reason is required';
+      newErrors.reason = "Reason is required";
     }
-    if (!formData.patientName && user?.role !== 'patient') {
-      newErrors.patientName = 'Patient name is required';
+    if (!formData.patientName && user?.role !== "patient") {
+      newErrors.patientName = "Patient name is required";
     }
 
     // Validate appointment is in the future
@@ -123,7 +124,7 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
         `${formData.appointmentDate}T${formData.appointmentTime}`
       );
       if (appointmentDateTime <= new Date()) {
-        newErrors.appointmentTime = 'Appointment must be in the future';
+        newErrors.appointmentTime = "Appointment must be in the future";
       }
     }
 
@@ -135,7 +136,9 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
     const slots = [];
     for (let hour = 9; hour <= 17; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
-        const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`;
         slots.push(timeString);
       }
     }
@@ -143,26 +146,26 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
   };
 
   const appointmentTypes = [
-    { value: 'consultation', label: 'Consultation' },
-    { value: 'follow-up', label: 'Follow-up' },
-    { value: 'checkup', label: 'Checkup' },
-    { value: 'procedure', label: 'Procedure' },
-    { value: 'surgery', label: 'Surgery' },
-    { value: 'emergency', label: 'Emergency' }
+    { value: "consultation", label: "Consultation" },
+    { value: "follow-up", label: "Follow-up" },
+    { value: "checkup", label: "Checkup" },
+    { value: "procedure", label: "Procedure" },
+    { value: "surgery", label: "Surgery" },
+    { value: "emergency", label: "Emergency" },
   ];
 
   const priorityLevels = [
-    { value: 'low', label: 'Low', color: 'text-green-600' },
-    { value: 'normal', label: 'Normal', color: 'text-blue-600' },
-    { value: 'high', label: 'High', color: 'text-yellow-600' },
-    { value: 'urgent', label: 'Urgent', color: 'text-red-600' }
+    { value: "low", label: "Low", color: "text-green-600" },
+    { value: "normal", label: "Normal", color: "text-blue-600" },
+    { value: "high", label: "High", color: "text-yellow-600" },
+    { value: "urgent", label: "Urgent", color: "text-red-600" },
   ];
 
   const recurringPatterns = [
-    { value: 'daily', label: 'Daily' },
-    { value: 'weekly', label: 'Weekly' },
-    { value: 'biweekly', label: 'Bi-weekly' },
-    { value: 'monthly', label: 'Monthly' }
+    { value: "daily", label: "Daily" },
+    { value: "weekly", label: "Weekly" },
+    { value: "biweekly", label: "Bi-weekly" },
+    { value: "monthly", label: "Monthly" },
   ];
 
   if (!isOpen) return null;
@@ -174,7 +177,7 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              {appointment ? 'Edit Appointment' : 'New Appointment'}
+              {appointment ? "Edit Appointment" : "New Appointment"}
             </CardTitle>
             <Button
               variant="outline"
@@ -198,9 +201,11 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Basic Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold border-b pb-2">Basic Information</h3>
-                
-                {user?.role !== 'patient' && (
+                <h3 className="text-lg font-semibold border-b pb-2">
+                  Basic Information
+                </h3>
+
+                {user?.role !== "patient" && (
                   <div>
                     <label className="block text-sm font-medium mb-2">
                       <User className="h-4 w-4 inline mr-1" />
@@ -209,15 +214,24 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                     <input
                       type="text"
                       value={formData.patientName}
-                      onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          patientName: e.target.value,
+                        })
+                      }
                       className={cn(
                         "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
-                        errors.patientName ? "border-red-300" : "border-gray-300"
+                        errors.patientName
+                          ? "border-red-300"
+                          : "border-gray-300"
                       )}
                       placeholder="Enter patient name"
                     />
                     {errors.patientName && (
-                      <p className="text-red-500 text-sm mt-1">{errors.patientName}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.patientName}
+                      </p>
                     )}
                   </div>
                 )}
@@ -229,7 +243,9 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                   </label>
                   <select
                     value={formData.doctorId}
-                    onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, doctorId: e.target.value })
+                    }
                     className={cn(
                       "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                       errors.doctorId ? "border-red-300" : "border-gray-300"
@@ -243,7 +259,9 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                     ))}
                   </select>
                   {errors.doctorId && (
-                    <p className="text-red-500 text-sm mt-1">{errors.doctorId}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.doctorId}
+                    </p>
                   )}
                 </div>
 
@@ -256,15 +274,24 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                     <input
                       type="date"
                       value={formData.appointmentDate}
-                      onChange={(e) => setFormData({ ...formData, appointmentDate: e.target.value })}
-                      min={new Date().toISOString().split('T')[0]}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          appointmentDate: e.target.value,
+                        })
+                      }
+                      min={new Date().toISOString().split("T")[0]}
                       className={cn(
                         "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
-                        errors.appointmentDate ? "border-red-300" : "border-gray-300"
+                        errors.appointmentDate
+                          ? "border-red-300"
+                          : "border-gray-300"
                       )}
                     />
                     {errors.appointmentDate && (
-                      <p className="text-red-500 text-sm mt-1">{errors.appointmentDate}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.appointmentDate}
+                      </p>
                     )}
                   </div>
 
@@ -275,25 +302,37 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                     </label>
                     <select
                       value={formData.appointmentTime}
-                      onChange={(e) => setFormData({ ...formData, appointmentTime: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          appointmentTime: e.target.value,
+                        })
+                      }
                       className={cn(
                         "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
-                        errors.appointmentTime ? "border-red-300" : "border-gray-300"
+                        errors.appointmentTime
+                          ? "border-red-300"
+                          : "border-gray-300"
                       )}
                     >
                       <option value="">Select time</option>
                       {generateTimeSlots().map((time) => (
                         <option key={time} value={time}>
-                          {new Date(`2000-01-01T${time}`).toLocaleTimeString('en-US', {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true
-                          })}
+                          {new Date(`2000-01-01T${time}`).toLocaleTimeString(
+                            "en-US",
+                            {
+                              hour: "numeric",
+                              minute: "2-digit",
+                              hour12: true,
+                            }
+                          )}
                         </option>
                       ))}
                     </select>
                     {errors.appointmentTime && (
-                      <p className="text-red-500 text-sm mt-1">{errors.appointmentTime}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.appointmentTime}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -306,7 +345,9 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                   <input
                     type="text"
                     value={formData.reason}
-                    onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, reason: e.target.value })
+                    }
                     className={cn(
                       "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                       errors.reason ? "border-red-300" : "border-gray-300"
@@ -321,13 +362,17 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
 
               {/* Additional Details */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold border-b pb-2">Additional Details</h3>
+                <h3 className="text-lg font-semibold border-b pb-2">
+                  Additional Details
+                </h3>
 
                 <div>
                   <label className="block text-sm font-medium mb-2">Type</label>
                   <select
                     value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, type: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     {appointmentTypes.map((type) => (
@@ -339,10 +384,14 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Priority</label>
+                  <label className="block text-sm font-medium mb-2">
+                    Priority
+                  </label>
                   <select
                     value={formData.priority}
-                    onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, priority: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     {priorityLevels.map((priority) => (
@@ -361,17 +410,26 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                   <input
                     type="text"
                     value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, location: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Room, building, or clinic location"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Duration (minutes)</label>
+                  <label className="block text-sm font-medium mb-2">
+                    Duration (minutes)
+                  </label>
                   <select
                     value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        duration: parseInt(e.target.value),
+                      })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value={15}>15 minutes</option>
@@ -384,10 +442,14 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Notes</label>
+                  <label className="block text-sm font-medium mb-2">
+                    Notes
+                  </label>
                   <textarea
                     value={formData.notes}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, notes: e.target.value })
+                    }
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Additional notes or special instructions"
@@ -399,7 +461,7 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
             {/* Advanced Options */}
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold mb-4">Advanced Options</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Recurring Appointments */}
                 <div className="space-y-4">
@@ -408,22 +470,37 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                       type="checkbox"
                       id="isRecurring"
                       checked={formData.isRecurring}
-                      onChange={(e) => setFormData({ ...formData, isRecurring: e.target.checked })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          isRecurring: e.target.checked,
+                        })
+                      }
                       className="rounded border-gray-300 focus:ring-blue-500"
                     />
-                    <label htmlFor="isRecurring" className="text-sm font-medium flex items-center gap-1">
+                    <label
+                      htmlFor="isRecurring"
+                      className="text-sm font-medium flex items-center gap-1"
+                    >
                       <Repeat className="h-4 w-4" />
                       Recurring Appointment
                     </label>
                   </div>
-                  
+
                   {formData.isRecurring && (
                     <div className="space-y-3 ml-6">
                       <div>
-                        <label className="block text-sm font-medium mb-1">Repeat Pattern</label>
+                        <label className="block text-sm font-medium mb-1">
+                          Repeat Pattern
+                        </label>
                         <select
                           value={formData.recurringPattern}
-                          onChange={(e) => setFormData({ ...formData, recurringPattern: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              recurringPattern: e.target.value,
+                            })
+                          }
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           {recurringPatterns.map((pattern) => (
@@ -434,11 +511,18 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-1">End Date</label>
+                        <label className="block text-sm font-medium mb-1">
+                          End Date
+                        </label>
                         <input
                           type="date"
                           value={formData.recurringEndDate}
-                          onChange={(e) => setFormData({ ...formData, recurringEndDate: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              recurringEndDate: e.target.value,
+                            })
+                          }
                           min={formData.appointmentDate}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -454,21 +538,36 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                       type="checkbox"
                       id="reminderEnabled"
                       checked={formData.reminderEnabled}
-                      onChange={(e) => setFormData({ ...formData, reminderEnabled: e.target.checked })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          reminderEnabled: e.target.checked,
+                        })
+                      }
                       className="rounded border-gray-300 focus:ring-blue-500"
                     />
-                    <label htmlFor="reminderEnabled" className="text-sm font-medium flex items-center gap-1">
+                    <label
+                      htmlFor="reminderEnabled"
+                      className="text-sm font-medium flex items-center gap-1"
+                    >
                       <Bell className="h-4 w-4" />
                       Send Reminder
                     </label>
                   </div>
-                  
+
                   {formData.reminderEnabled && (
                     <div className="ml-6">
-                      <label className="block text-sm font-medium mb-1">Remind Before</label>
+                      <label className="block text-sm font-medium mb-1">
+                        Remind Before
+                      </label>
                       <select
                         value={formData.reminderTime}
-                        onChange={(e) => setFormData({ ...formData, reminderTime: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            reminderTime: parseInt(e.target.value),
+                          })
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value={1}>1 hour</option>
@@ -507,7 +606,7 @@ const AppointmentForm = ({ appointment, onSave, onCancel, isOpen }) => {
                 ) : (
                   <>
                     <Save className="h-4 w-4" />
-                    {appointment ? 'Update' : 'Create'} Appointment
+                    {appointment ? "Update" : "Create"} Appointment
                   </>
                 )}
               </Button>

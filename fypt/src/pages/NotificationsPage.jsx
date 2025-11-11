@@ -161,7 +161,7 @@ const NotificationsPage = () => {
             </Button>
             <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
               <span className="text-sm font-medium text-green-600">
-                {user?.name?.charAt(0) || 'U'}
+                {user?.name?.charAt(0) || "U"}
               </span>
             </div>
           </div>
@@ -186,236 +186,125 @@ const NotificationsPage = () => {
                   <h1 className="text-3xl font-bold text-gray-900">
                     Notifications
                   </h1>
-                <p className="text-gray-600">
-                  Stay updated with your health alerts and reminders
-                </p>
+                  <p className="text-gray-600">
+                    Stay updated with your health alerts and reminders
+                  </p>
+                </div>
               </div>
+
+              <Button
+                onClick={() => setShowSettings(!showSettings)}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <SettingsIcon className="w-4 h-4" />
+                Settings
+              </Button>
             </div>
 
-            <Button
-              onClick={() => setShowSettings(!showSettings)}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              <SettingsIcon className="w-4 h-4" />
-              Settings
-            </Button>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {quickStats.map((stat, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.color}`}
-                  >
-                    <stat.icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stat.value}
-                    </p>
-                    <p className="text-sm text-gray-600">{stat.title}</p>
-                    <p className="text-xs text-gray-500">{stat.description}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Notifications Panel */}
-          <div className="lg:col-span-2">
-            <NotificationsPanel
-              showHeader={false}
-              maxHeight="calc(100vh - 280px)"
-              className="shadow-lg"
-            />
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Notification Types */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <BarChart3 className="w-5 h-5 text-blue-500" />
-                  By Category
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {notificationTypes.map((type) => (
-                  <div
-                    key={type.type}
-                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 cursor-pointer transition-colors"
-                  >
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {quickStats.map((stat, index) => (
+                <Card key={index} className="p-4">
+                  <div className="flex items-center gap-3">
                     <div
-                      className={`w-10 h-10 rounded-lg flex items-center justify-center ${type.color}`}
+                      className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.color}`}
                     >
-                      <type.icon className="w-5 h-5" />
+                      <stat.icon className="w-5 h-5" />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-medium text-sm">{type.title}</h3>
-                        <span className="text-lg font-bold text-gray-900">
-                          {type.count}
-                        </span>
-                      </div>
-                      <p className="text-xs text-gray-600">
-                        {type.description}
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </p>
+                      <p className="text-sm text-gray-600">{stat.title}</p>
+                      <p className="text-xs text-gray-500">
+                        {stat.description}
                       </p>
                     </div>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
+                </Card>
+              ))}
+            </div>
+          </div>
 
-            {/* Settings Panel */}
-            {showSettings && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Notifications Panel */}
+            <div className="lg:col-span-2">
+              <NotificationsPanel
+                showHeader={false}
+                maxHeight="calc(100vh - 280px)"
+                className="shadow-lg"
+              />
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Notification Types */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <SettingsIcon className="w-5 h-5 text-gray-500" />
-                    Notification Settings
+                    <BarChart3 className="w-5 h-5 text-blue-500" />
+                    By Category
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Email Notifications */}
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-gray-700">
-                      Email Notifications
-                    </label>
-                    <button
-                      onClick={() =>
-                        handleSettingsChange(
-                          "emailNotifications",
-                          !notificationSettings.emailNotifications
-                        )
-                      }
-                      className={`w-11 h-6 rounded-full transition-colors ${
-                        notificationSettings.emailNotifications
-                          ? "bg-blue-500"
-                          : "bg-gray-300"
-                      }`}
+                <CardContent className="space-y-3">
+                  {notificationTypes.map((type) => (
+                    <div
+                      key={type.type}
+                      className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 cursor-pointer transition-colors"
                     >
                       <div
-                        className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
-                          notificationSettings.emailNotifications
-                            ? "translate-x-5"
-                            : "translate-x-0.5"
-                        }`}
-                      />
-                    </button>
-                  </div>
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center ${type.color}`}
+                      >
+                        <type.icon className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-medium text-sm">{type.title}</h3>
+                          <span className="text-lg font-bold text-gray-900">
+                            {type.count}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-600">
+                          {type.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
 
-                  {/* Push Notifications */}
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-gray-700">
-                      Push Notifications
-                    </label>
-                    <button
-                      onClick={() =>
-                        handleSettingsChange(
-                          "pushNotifications",
-                          !notificationSettings.pushNotifications
-                        )
-                      }
-                      className={`w-11 h-6 rounded-full transition-colors ${
-                        notificationSettings.pushNotifications
-                          ? "bg-blue-500"
-                          : "bg-gray-300"
-                      }`}
-                    >
-                      <div
-                        className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
-                          notificationSettings.pushNotifications
-                            ? "translate-x-5"
-                            : "translate-x-0.5"
-                        }`}
-                      />
-                    </button>
-                  </div>
-
-                  {/* Appointment Reminders */}
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-gray-700">
-                      Appointment Reminders
-                    </label>
-                    <button
-                      onClick={() =>
-                        handleSettingsChange(
-                          "appointmentReminders",
-                          !notificationSettings.appointmentReminders
-                        )
-                      }
-                      className={`w-11 h-6 rounded-full transition-colors ${
-                        notificationSettings.appointmentReminders
-                          ? "bg-blue-500"
-                          : "bg-gray-300"
-                      }`}
-                    >
-                      <div
-                        className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
-                          notificationSettings.appointmentReminders
-                            ? "translate-x-5"
-                            : "translate-x-0.5"
-                        }`}
-                      />
-                    </button>
-                  </div>
-
-                  {/* Medication Reminders */}
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-gray-700">
-                      Medication Reminders
-                    </label>
-                    <button
-                      onClick={() =>
-                        handleSettingsChange(
-                          "medicationReminders",
-                          !notificationSettings.medicationReminders
-                        )
-                      }
-                      className={`w-11 h-6 rounded-full transition-colors ${
-                        notificationSettings.medicationReminders
-                          ? "bg-blue-500"
-                          : "bg-gray-300"
-                      }`}
-                    >
-                      <div
-                        className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
-                          notificationSettings.medicationReminders
-                            ? "translate-x-5"
-                            : "translate-x-0.5"
-                        }`}
-                      />
-                    </button>
-                  </div>
-
-                  {/* Quiet Hours */}
-                  <div className="border-t pt-4">
-                    <div className="flex items-center justify-between mb-3">
+              {/* Settings Panel */}
+              {showSettings && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <SettingsIcon className="w-5 h-5 text-gray-500" />
+                      Notification Settings
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* Email Notifications */}
+                    <div className="flex items-center justify-between">
                       <label className="text-sm font-medium text-gray-700">
-                        Quiet Hours
+                        Email Notifications
                       </label>
                       <button
                         onClick={() =>
                           handleSettingsChange(
-                            "quietHoursEnabled",
-                            !notificationSettings.quietHoursEnabled
+                            "emailNotifications",
+                            !notificationSettings.emailNotifications
                           )
                         }
                         className={`w-11 h-6 rounded-full transition-colors ${
-                          notificationSettings.quietHoursEnabled
+                          notificationSettings.emailNotifications
                             ? "bg-blue-500"
                             : "bg-gray-300"
                         }`}
                       >
                         <div
                           className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
-                            notificationSettings.quietHoursEnabled
+                            notificationSettings.emailNotifications
                               ? "translate-x-5"
                               : "translate-x-0.5"
                           }`}
@@ -423,76 +312,189 @@ const NotificationsPage = () => {
                       </button>
                     </div>
 
-                    {notificationSettings.quietHoursEnabled && (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-gray-500" />
-                          <span className="text-xs text-gray-600">From</span>
-                          <input
-                            type="time"
-                            value={notificationSettings.quietHoursStart}
-                            onChange={(e) =>
-                              handleSettingsChange(
-                                "quietHoursStart",
-                                e.target.value
-                              )
-                            }
-                            className="text-xs border rounded px-2 py-1"
+                    {/* Push Notifications */}
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-gray-700">
+                        Push Notifications
+                      </label>
+                      <button
+                        onClick={() =>
+                          handleSettingsChange(
+                            "pushNotifications",
+                            !notificationSettings.pushNotifications
+                          )
+                        }
+                        className={`w-11 h-6 rounded-full transition-colors ${
+                          notificationSettings.pushNotifications
+                            ? "bg-blue-500"
+                            : "bg-gray-300"
+                        }`}
+                      >
+                        <div
+                          className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
+                            notificationSettings.pushNotifications
+                              ? "translate-x-5"
+                              : "translate-x-0.5"
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Appointment Reminders */}
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-gray-700">
+                        Appointment Reminders
+                      </label>
+                      <button
+                        onClick={() =>
+                          handleSettingsChange(
+                            "appointmentReminders",
+                            !notificationSettings.appointmentReminders
+                          )
+                        }
+                        className={`w-11 h-6 rounded-full transition-colors ${
+                          notificationSettings.appointmentReminders
+                            ? "bg-blue-500"
+                            : "bg-gray-300"
+                        }`}
+                      >
+                        <div
+                          className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
+                            notificationSettings.appointmentReminders
+                              ? "translate-x-5"
+                              : "translate-x-0.5"
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Medication Reminders */}
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-gray-700">
+                        Medication Reminders
+                      </label>
+                      <button
+                        onClick={() =>
+                          handleSettingsChange(
+                            "medicationReminders",
+                            !notificationSettings.medicationReminders
+                          )
+                        }
+                        className={`w-11 h-6 rounded-full transition-colors ${
+                          notificationSettings.medicationReminders
+                            ? "bg-blue-500"
+                            : "bg-gray-300"
+                        }`}
+                      >
+                        <div
+                          className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
+                            notificationSettings.medicationReminders
+                              ? "translate-x-5"
+                              : "translate-x-0.5"
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Quiet Hours */}
+                    <div className="border-t pt-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <label className="text-sm font-medium text-gray-700">
+                          Quiet Hours
+                        </label>
+                        <button
+                          onClick={() =>
+                            handleSettingsChange(
+                              "quietHoursEnabled",
+                              !notificationSettings.quietHoursEnabled
+                            )
+                          }
+                          className={`w-11 h-6 rounded-full transition-colors ${
+                            notificationSettings.quietHoursEnabled
+                              ? "bg-blue-500"
+                              : "bg-gray-300"
+                          }`}
+                        >
+                          <div
+                            className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
+                              notificationSettings.quietHoursEnabled
+                                ? "translate-x-5"
+                                : "translate-x-0.5"
+                            }`}
                           />
-                          <span className="text-xs text-gray-600">to</span>
-                          <input
-                            type="time"
-                            value={notificationSettings.quietHoursEnd}
-                            onChange={(e) =>
-                              handleSettingsChange(
-                                "quietHoursEnd",
-                                e.target.value
-                              )
-                            }
-                            className="text-xs border rounded px-2 py-1"
-                          />
-                        </div>
+                        </button>
                       </div>
-                    )}
-                  </div>
+
+                      {notificationSettings.quietHoursEnabled && (
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-gray-500" />
+                            <span className="text-xs text-gray-600">From</span>
+                            <input
+                              type="time"
+                              value={notificationSettings.quietHoursStart}
+                              onChange={(e) =>
+                                handleSettingsChange(
+                                  "quietHoursStart",
+                                  e.target.value
+                                )
+                              }
+                              className="text-xs border rounded px-2 py-1"
+                            />
+                            <span className="text-xs text-gray-600">to</span>
+                            <input
+                              type="time"
+                              value={notificationSettings.quietHoursEnd}
+                              onChange={(e) =>
+                                handleSettingsChange(
+                                  "quietHoursEnd",
+                                  e.target.value
+                                )
+                              }
+                              className="text-xs border rounded px-2 py-1"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => console.log("Mark all read")}
+                  >
+                    <BellRing className="w-4 h-4 mr-2" />
+                    Mark All as Read
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => console.log("Archive old")}
+                  >
+                    <Archive className="w-4 h-4 mr-2" />
+                    Archive Old Notifications
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => console.log("Filter by priority")}
+                  >
+                    <Filter className="w-4 h-4 mr-2" />
+                    Show High Priority Only
+                  </Button>
                 </CardContent>
               </Card>
-            )}
-
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => console.log("Mark all read")}
-                >
-                  <BellRing className="w-4 h-4 mr-2" />
-                  Mark All as Read
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => console.log("Archive old")}
-                >
-                  <Archive className="w-4 h-4 mr-2" />
-                  Archive Old Notifications
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => console.log("Filter by priority")}
-                >
-                  <Filter className="w-4 h-4 mr-2" />
-                  Show High Priority Only
-                </Button>
-              </CardContent>
-            </Card>
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
